@@ -1,0 +1,51 @@
+package ${enum_package};
+
+/**
+ * ${enumeration.comment}枚举
+ *
+ * @author ${author}
+ * @version $v: ${version}, $time:${datetime} Exp $
+ */
+public enum ${enumeration.className}Enum {
+
+#foreach($s in $enumeration.propertyList)
+    /** ${s.comment} **/
+    ${s.upperName}("${s.name}", "${s.comment}"),
+
+#end
+	;
+
+	private String code;
+	private String desc;
+
+    ${enumeration.className}Enum(String code, String desc) {
+        this.code = code;
+        this.desc = desc;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getDesc() {
+        return desc;
+    }
+
+    public static ${enumeration.className}Enum getByCode(String code) {
+        for (${enumeration.className}Enum enumObj : ${enumeration.className}Enum.values()) {
+            if (enumObj.getCode().equals(code)) {
+                return enumObj;
+            }
+        }
+        return null;
+    }
+
+    public static ${enumeration.className}Enum getByDesc(String desc) {
+        for (${enumeration.className}Enum enumObj : ${enumeration.className}Enum.values()) {
+            if (enumObj.getDesc().equals(desc)) {
+                return enumObj;
+            }
+        }
+        return null;
+    }
+}

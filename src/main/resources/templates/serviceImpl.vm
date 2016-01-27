@@ -1,0 +1,23 @@
+package ${service_impl_package};
+
+import java.util.List;
+
+import ${base_service_impl_package}.${table.className}BaseServiceImpl;
+import ${service_package}.${table.className}Service;
+
+import org.springframework.stereotype.Service;
+#foreach($package in $packages)
+import ${package};
+#end
+
+/**
+ * ${table.tableComment}Service接口实现
+ *
+ * @author ${author}
+ * @version $v: ${version}, $time:${datetime} Exp $
+ */
+@Service
+public class ${table.className}ServiceImpl extends ${table.className}BaseServiceImpl implements ${table.className}Service {
+
+	/** 此处写一些算定义的方法，不要修改Base的方法 **/
+}

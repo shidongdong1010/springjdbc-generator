@@ -1,0 +1,301 @@
+package ${base_dao_impl_package};
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.core.namedparam.SqlParameterSourceUtils;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+
+import ${base_dao_package}.${table.className}BaseDao;
+#foreach($package in $packages)
+import ${package};
+#end
+
+/**
+ * ${table.tableComment}Dao基础操作接口实现
+ *
+ * @author ${author}
+ * @version $v: ${version}, $time:${datetime} Exp $
+ */
+public class ${table.className}BaseDaoImpl implements ${table.className}BaseDao{
+	@Autowired
+	protected JdbcTemplate jdbcTemplate;
+
+	/** 查询字段的SQL **/
+	public static String SELECT_COLUMN_SQL = "${table.selectColumnSql}";
+	/** 查询SQL **/
+	public static String SELECT_SQL = "${table.selectSql}";
+	/** 插入SQL **/
+	public static String INSERT_SQL = "${table.insertSql}";
+	/** 更新SQL **/
+	public static String UPDATE_SQL = "${table.updateSql}";
+	/** 删除SQL **/
+	public static String DELETE_SQL = "${table.deleteSql}";
+
+	@Override
+	public void save(${table.className} ${table.propertyName}) {
+		// 构造SQL的参数
+		Map<String, Object> paramMap = toMap(${table.propertyName});
+		
+		KeyHolder keyHolder = new GeneratedKeyHolder();
+		new NamedParameterJdbcTemplate(jdbcTemplate).update(INSERT_SQL, new MapSqlParameterSource(paramMap), keyHolder);
+		
+		// 生成主键
+		${table.propertyName}.${table.columnKey.propertyNameSetter}(keyHolder.getKey().longValue());
+	}
+	
+	@Override
+	public void update(${table.className} ${table.propertyName}) {
+		// 构造SQL的参数
+		Map<String, Object> paramMap = toMap(${table.propertyName});
+		new NamedParameterJdbcTemplate(jdbcTemplate).update(UPDATE_SQL, paramMap);
+	}
+
+	@Override
+	public void modify(${table.className} ${table.propertyName}) {
+		StringBuilder sql = new StringBuilder();
+		List<Object> param = new ArrayList<Object>();
+		sql.append(" UPDATE ${table.tableName} SET ");
+#foreach($s in $columns)
+#if ($columns.size() == $velocityCount)
+		if(${table.propertyName}.${s.propertyNameGetter}() != null){
+			sql.append(" ${s.columnName} = ? ");
+			param.add(${table.propertyName}.${s.propertyNameGetter}());
+		}
+#else
+		if(${table.propertyName}.${s.propertyNameGetter}() != null){
+			sql.append(" ${s.columnName} = ?, ");
+			param.add(${table.propertyName}.${s.propertyNameGetter}());
+		}
+#end
+#end##
+		sql.append(" WHERE ${table.columnKey.columnName} = ? ");
+		param.add(${table.propertyName}.${table.columnKey.propertyNameGetter}());
+
+		jdbcTemplate.update(sql.toString(), param.toArray());
+	}
+
+	/**
+	 * 将对象转换成Map
+	 * @param ${table.propertyName}s
+	 * @return
+	 */
+	public Map<String, Object>[] toMap(List<${table.className}> ${table.propertyName}s){
+		Map<String, Object>[] maps = new Map[${table.propertyName}s.size()];
+		for(int i = 0; i < ${table.propertyName}s.size(); i++){
+			${table.className} ${table.propertyName} = ${table.propertyName}s.get(i);
+			maps[i] = toMap(${table.propertyName});
+		}
+		return maps;
+	}
+
+	/**
+	 * 将对象转换成Map
+	 * @param ${table.propertyName}
+	 * @return
+	 */
+	public Map<String, Object> toMap(${table.className} ${table.propertyName}){
+		Map<String, Object> paramMap = new HashMap<String, Object>();
+#foreach($s in $columns)
+        paramMap.put("${s.columnName}", ${table.propertyName}.${s.propertyNameGetter}());
+#end##
+		return paramMap;
+	}
+
+	/**
+	 * 查询的字段字符串
+	 * @return
+	 */
+	public String selectColumn(){
+		return SELECT_COLUMN_SQL;
+	}
+
+	@Override
+	public void delete(${table.columnKey.propertyType.javaType} ${table.columnKey.propertyName}){
+		jdbcTemplate.update(DELETE_SQL, ${table.columnKey.propertyName});
+	}
+
+	@Override
+	public void batchSave(List<${table.className}> list){
+		Map<String, Object>[] params = toMap(list);
+		new NamedParameterJdbcTemplate(jdbcTemplate).batchUpdate(INSERT_SQL, params);
+	}
+
+	@Override
+	public void batchUpdate(List<${table.className}> list){
+		Map<String, Object>[] params = toMap(list);
+		new NamedParameterJdbcTemplate(jdbcTemplate).batchUpdate(UPDATE_SQL, params);
+	}
+
+	@Override
+	public void batchDelete(List<Long> ids){
+        List<Object[]> list = new ArrayList<Object[]>();
+        for(Long id : ids){
+            list.add(new Object[]{id});
+        }
+        jdbcTemplate.batchUpdate(DELETE_SQL, list);
+	}
+
+
+	/**
+	 * 根据主键查询
+	 * @param ${table.columnKey.propertyName} ${table.columnKey.columnComment}
+	 * @return ${table.className}
+	 */
+	@Override
+	public ${table.className} findById(${table.columnKey.propertyType.javaType} ${table.columnKey.propertyName}){
+		StringBuilder sql = new StringBuilder();
+		sql.append(SELECT_SQL);
+		sql.append(" WHERE _this.`${table.columnKey.columnName}` = ? ");
+		return jdbcTemplate.queryForObject(sql.toString(), BeanPropertyRowMapper.newInstance(${table.className}.class), ${table.columnKey.propertyName});
+	}
+
+	/**
+	 * 根据对象查询
+	 * @param ${table.propertyName}
+	 * @return List
+	 */
+	@Override
+	public List<${table.className}> find(${table.className} ${table.propertyName}){
+		return this.find(${table.propertyName}, null, null);
+	}
+
+	/**
+	 * 根据对象查询
+	 * @param ${table.propertyName}
+	 * @param orders 排序字段，可多字段排序。格式{{"字段名", "asc"}, {"字段名, "desc"}}
+	 * @return List
+	 */
+	@Override
+	public List<${table.className}> find(${table.className} ${table.propertyName}, String[][] orders){
+		return this.find(${table.propertyName}, orders, null, null);
+	}
+
+	/**
+	 * 根据对象查询
+	 * @param ${table.propertyName}
+     * @param offset 开始索引
+     * @param rows 条数(从第offset+1条开始，取rows条)
+	 * @return List
+	 */
+	@Override
+	public List<${table.className}> find(${table.className} ${table.propertyName}, Long offset, Long rows){
+		return this.find(${table.propertyName}, null, offset, rows);
+	}
+
+	/**
+	 * 根据对象查询
+	 * @param ${table.propertyName}
+	 * @param orders 排序字段，可多字段排序。格式{{"字段名", "asc"}, {"字段名, "desc"}}
+     * @param offset 开始索引
+     * @param rows 条数(从第offset+1条开始，取rows条)
+	 * @return List
+	 */
+	@Override
+	public List<${table.className}> find(${table.className} ${table.propertyName}, String[][] orders, Long offset, Long rows){
+		StringBuilder sql = new StringBuilder();
+		sql.append(SELECT_SQL);
+		sql.append(" WHERE 1 = 1 ");
+
+		List<Object> param = new ArrayList<Object>();
+    	if(${table.propertyName} != null){
+#foreach($s in $columns)
+#if($s.propertyType.javaType == 'String')
+			if(${table.propertyName}.${s.propertyNameGetter}() != null && !"".equals(${table.propertyName}.${s.propertyNameGetter}())){
+				sql.append(" AND _this.`${s.columnName}` = ?");
+				param.add(${table.propertyName}.${s.propertyNameGetter}());
+			}
+#end##
+#if($s.propertyType.javaType == 'Long' || $s.propertyType.javaType == 'Integer')
+			if(${table.propertyName}.${s.propertyNameGetter}() != null){
+				sql.append(" AND _this.`${s.columnName}` = ?");
+				param.add(${table.propertyName}.${s.propertyNameGetter}());
+			}
+#end##
+#if($s.propertyType.javaType == 'Date')
+			if(${table.propertyName}.${s.propertyNameGetter}() != null){
+				sql.append(" AND _this.`${s.columnName}` = ?");
+				param.add(${table.propertyName}.${s.propertyNameGetter}());
+			}
+#end##
+#end##
+		}
+
+		// 排序
+		if(orders != null && orders.length > 0){
+   			sql.append(" ORDER BY ");
+			for(int i = 0; i < orders.length; i++){
+    			String[] order = orders[i];
+				if(i != 0){
+    				sql.append("_this.`").append(order[0]).append("`, ");
+				}
+				if(order.length == 1){
+    				sql.append("_this.`").append(order[0]).append("` ASC ");
+				}else{
+    				sql.append("_this.`").append(order[0]).append("` ").append(order[1]);
+				}
+			}
+		}
+
+		// 分页
+		if(offset != null  && rows != null){
+        	sql.append("  limit ?,? ");
+        	param.add(offset);
+        	param.add(rows);
+		} else if(rows != null){
+			sql.append("  limit ? ");
+			param.add(rows);
+		}
+		return jdbcTemplate.query(sql.toString(), param.toArray(), BeanPropertyRowMapper.newInstance(${table.className}.class));
+	}
+
+
+	/**
+	 * 根据对象查询条数
+	 * @param ${table.propertyName}
+	 * @return Long
+	 */
+	@Override
+	public Long count(${table.className} ${table.propertyName}){
+		StringBuilder sql = new StringBuilder();
+		sql.append(" SELECT count(*) ");
+		sql.append(" FROM ${table.tableName}  _this ");
+		sql.append(" WHERE 1 = 1 ");
+
+		List<Object> param = new ArrayList<Object>();
+        if(${table.propertyName} != null){
+#foreach($s in $columns)
+#if($s.propertyType.javaType == 'String')
+			if(${table.propertyName}.${s.propertyNameGetter}() != null && !"".equals(${table.propertyName}.${s.propertyNameGetter}())){
+				sql.append(" AND _this.`${s.columnName}` = ? ");
+				param.add(${table.propertyName}.${s.propertyNameGetter}());
+			}
+#end##
+#if($s.propertyType.javaType == 'Long' || $s.propertyType.javaType == 'Integer')
+			if(${table.propertyName}.${s.propertyNameGetter}() != null){
+				sql.append(" AND _this.`${s.columnName}` = ? ");
+				param.add(${table.propertyName}.${s.propertyNameGetter}());
+			}
+#end##
+#if($s.propertyType.javaType == 'Date')
+			if(${table.propertyName}.${s.propertyNameGetter}() != null){
+				sql.append(" AND _this.`${s.columnName}` = ? ");
+				param.add(${table.propertyName}.${s.propertyNameGetter}());
+			}
+#end##
+#end##
+		}
+        return jdbcTemplate.queryForObject(sql.toString(), Long.class, param.toArray());
+	}
+}

@@ -1,0 +1,23 @@
+package ${dao_impl_package};
+
+import java.util.List;
+
+import ${base_dao_impl_package}.${table.className}BaseDaoImpl;
+import ${dao_package}.${table.className}Dao;
+
+import org.springframework.stereotype.Repository;
+#foreach($package in $packages)
+import ${package};
+#end
+
+/**
+ * ${table.tableComment}Dao接口实现
+ *
+ * @author ${author}
+ * @version $v: ${version}, $time:${datetime} Exp $
+ */
+@Repository
+public class ${table.className}DaoImpl extends ${table.className}BaseDaoImpl implements ${table.className}Dao {
+
+	/** 此处写一些算定义的方法，不要修改Base的方法 **/
+}

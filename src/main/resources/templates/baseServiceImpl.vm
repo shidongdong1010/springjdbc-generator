@@ -1,0 +1,121 @@
+package ${base_service_impl_package};
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import ${base_service_package}.${table.className}BaseService;
+import ${dao_package}.${table.className}Dao;
+
+#foreach($package in $packages)
+import ${package};
+#end
+
+/**
+ * ${table.tableComment}Service基础操作接口实现
+ *
+ * @author ${author}
+ * @version $v: ${version}, $time:${datetime} Exp $
+ */
+public class ${table.className}BaseServiceImpl implements ${table.className}BaseService{
+	@Autowired
+	protected ${table.className}Dao ${table.propertyName}Dao;
+
+	@Override
+	public void save(${table.className} ${table.propertyName}) {
+		${table.propertyName}Dao.save(${table.propertyName});
+	}
+	
+	@Override
+	public void update(${table.className} ${table.propertyName}) {
+		${table.propertyName}Dao.update(${table.propertyName});
+	}
+
+	@Override
+	public void modify(${table.className} ${table.propertyName}) {
+		${table.propertyName}Dao.modify(${table.propertyName});
+	}
+
+	@Override
+	public void delete(${table.columnKey.propertyType.javaType} ${table.columnKey.propertyName}){
+		${table.propertyName}Dao.delete(${table.columnKey.propertyName});
+	}
+
+	@Override
+	public void batchSave(List<${table.className}> list){
+		${table.propertyName}Dao.batchSave(list);
+	}
+
+	@Override
+    public void batchUpdate(List<${table.className}> list){
+		${table.propertyName}Dao.batchUpdate(list);
+	}
+
+	@Override
+    public void batchDelete(List<Long> ids){
+		${table.propertyName}Dao.batchDelete(ids);
+	}
+
+	/**
+	 * 根据主键查询
+	 * @param ${table.columnKey.propertyName} ${table.columnKey.columnComment}
+	 * @return ${table.className}
+	 */
+	public ${table.className} findById(${table.columnKey.propertyType.javaType} ${table.columnKey.propertyName}){
+		return ${table.propertyName}Dao.findById(${table.columnKey.propertyName});
+	}
+
+	/**
+	 * 根据对象查询
+	 * @param ${table.propertyName}
+	 * @return List
+	 */
+	public List<${table.className}> find(${table.className} ${table.propertyName}){
+		return ${table.propertyName}Dao.find(${table.propertyName});
+	}
+
+	/**
+	 * 根据对象查询
+	 * @param ${table.propertyName}
+	 * @param orders 排序字段，可多字段排序。格式{{"字段名", "asc"}, {"字段名, "desc"}}
+	 * @return List
+	 */
+	public List<${table.className}> find(${table.className} ${table.propertyName}, String[][] orders){
+		return ${table.propertyName}Dao.find(${table.propertyName}, orders);
+	}
+
+	/**
+	 * 根据对象查询
+	 * @param ${table.propertyName}
+     * @param offset 开始索引
+     * @param rows 条数(从第offset+1条开始，取rows条)
+	 * @return List
+	 */
+	public List<${table.className}> find(${table.className} ${table.propertyName}, Long offset, Long rows){
+		return ${table.propertyName}Dao.find(${table.propertyName}, offset, rows);
+	}
+
+	/**
+	 * 根据对象查询
+	 * @param ${table.propertyName}
+	 * @param orders 排序字段，可多字段排序。格式{{"字段名", "asc"}, {"字段名, "desc"}}
+     * @param offset 开始索引
+     * @param rows 条数(从第offset+1条开始，取rows条)
+	 * @return List
+	 */
+	public List<${table.className}> find(${table.className} ${table.propertyName}, String[][] orders, Long offset, Long rows){
+    	return ${table.propertyName}Dao.find(${table.propertyName}, orders, offset, rows);
+	}
+
+	/**
+	 * 根据对象查询条数
+	 * @param ${table.propertyName}
+	 * @return Long
+	 */
+	public Long count(${table.className} ${table.propertyName}){
+		return ${table.propertyName}Dao.count(${table.propertyName});
+	}
+}
