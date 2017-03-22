@@ -14,33 +14,33 @@ import ${package};
  */
 public interface ${table.className}BaseDao {
 
-	public void save(${table.className} ${table.propertyName});
+	void save(${table.className} ${table.propertyName});
 	
-	public void update(${table.className} ${table.propertyName});
+	void update(${table.className} ${table.propertyName});
 
-	public void modify(${table.className} ${table.propertyName});
+	void modify(${table.className} ${table.propertyName});
 
-	public void delete(${table.columnKey.propertyType.javaType} ${table.columnKey.propertyName});
+	void delete(${table.columnKey.propertyType.javaType} ${table.columnKey.propertyName});
 
-	public void batchSave(List<${table.className}> list);
+	void batchSave(List<${table.className}> list);
 
-    public void batchUpdate(List<${table.className}> list);
+    void batchUpdate(List<${table.className}> list);
 
-    public void batchDelete(List<Long> ids);
+    void batchDelete(List<Long> ids);
 
 	/**
 	 * 根据主键查询
 	 * @param ${table.columnKey.propertyName} ${table.columnKey.columnComment}
 	 * @return ${table.className}
 	 */
-	public ${table.className} findById(${table.columnKey.propertyType.javaType} ${table.columnKey.propertyName});
+	${table.className} findById(${table.columnKey.propertyType.javaType} ${table.columnKey.propertyName});
 
 	/**
 	 * 根据对象查询
 	 * @param ${table.propertyName}
 	 * @return List
 	 */
-	public List<${table.className}> find(${table.className} ${table.propertyName});
+	List<${table.className}> find(${table.className} ${table.propertyName});
 
 	/**
 	 * 根据对象查询
@@ -48,7 +48,7 @@ public interface ${table.className}BaseDao {
 	 * @param orders 排序字段，可多字段排序。格式{{"字段名", "asc"}, {"字段名, "desc"}}
 	 * @return List
 	 */
-	public List<${table.className}> find(${table.className} ${table.propertyName}, String[][] orders);
+	List<${table.className}> find(${table.className} ${table.propertyName}, String[][] orders);
 
 	/**
 	 * 根据对象查询
@@ -57,7 +57,7 @@ public interface ${table.className}BaseDao {
      * @param rows 条数(从第offset+1条开始，取rows条)
 	 * @return List
 	 */
-	public List<${table.className}> find(${table.className} ${table.propertyName}, Long offset, Long rows);
+	List<${table.className}> find(${table.className} ${table.propertyName}, Long offset, Long rows);
 
 	/**
 	 * 根据对象查询
@@ -67,12 +67,12 @@ public interface ${table.className}BaseDao {
      * @param rows 条数(从第offset+1条开始，取rows条)
 	 * @return List
 	 */
-	public List<${table.className}> find(${table.className} ${table.propertyName}, String[][] orders, Long offset, Long rows);
+	List<${table.className}> find(${table.className} ${table.propertyName}, String[][] orders, Long offset, Long rows);
 
 	/**
 	 * 根据对象查询条数
 	 * @param ${table.propertyName}
 	 * @return Long
 	 */
-	public Long count(${table.className} ${table.propertyName});
+	Long count(${table.className} ${table.propertyName});
 }

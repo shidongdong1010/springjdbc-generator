@@ -19,5 +19,5 @@ import ${package};
 @Service
 public class ${table.className}ServiceImpl extends ${table.className}BaseServiceImpl implements ${table.className}Service {
 
-	/** 此处写一些算定义的方法，不要修改Base的方法 **/
+	/** 此处写一些自定义的方法，不要修改Base的方法 **/
 }

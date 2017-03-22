@@ -144,7 +144,9 @@ public class Table {
             sql.append(" = :").append(column.getColumnName());
         }
         sql.append(" WHERE ");
-        sql.append("`").append(columnKey.getColumnName()).append("`").append(" = :").append(columnKey.getColumnName());
+        if(columnKey != null) {
+            sql.append("`").append(columnKey.getColumnName()).append("`").append(" = :").append(columnKey.getColumnName());
+        }
         return sql.toString();
     }
 
@@ -157,7 +159,9 @@ public class Table {
         sql.append("DELETE FROM ");
         sql.append(getTableName());
         sql.append(" WHERE ");
-        sql.append("`").append(columnKey.getColumnName()).append("`").append(" = ?");
+        if(columnKey != null) {
+            sql.append("`").append(columnKey.getColumnName()).append("`").append(" = ?");
+        }
         return sql.toString();
     }
 }

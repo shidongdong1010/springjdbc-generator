@@ -109,6 +109,25 @@
         <property name="dao" ref="dao" />
     </bean>
 
+    <!-- 生成Mapper -->
+    <bean id="generatorMapper" class="org.dd.GeneratorMapper">
+        <property name="templateService" ref="templateService"/>
+        <property name="dao" ref="dao" />
+    </bean>
+
+    <!-- 生成Do -->
+    <bean id="generatorDo" class="org.dd.GeneratorDTO">
+        <property name="templateService" ref="templateService"/>
+        <property name="dao" ref="dao" />
+    </bean>
+
+    <!-- 生成Convert -->
+    <bean id="generatorConvert" class="org.dd.GeneratorConvert">
+        <property name="templateService" ref="templateService"/>
+        <property name="dao" ref="dao" />
+    </bean>
+
+
     <!-- 生成Dao -->
     <bean id="generatorDao" class="org.dd.GeneratorDao">
         <property name="templateService" ref="templateService"/>

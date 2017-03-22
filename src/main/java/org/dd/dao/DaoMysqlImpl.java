@@ -37,6 +37,7 @@ public class DaoMysqlImpl {
         sql.append(" FROM  INFORMATION_SCHEMA.TABLES ");
         sql.append("   WHERE ");
         sql.append(" TABLE_SCHEMA = :schema ");
+        sql.append(" AND TABLE_TYPE = 'BASE TABLE' ");
         MapSqlParameterSource param = new MapSqlParameterSource();
         param.addValue("schema", schema);
         if(tableNames != null) {

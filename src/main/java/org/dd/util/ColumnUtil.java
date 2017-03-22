@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
  * @author SDD
  * @version $v: 1.0.0, $time:2015/9/29 15:04 Exp $
  */
-public class PropertyUtil {
+public class ColumnUtil {
 
     /**
      * 对象属性转换为字段  例如：userName to user_name

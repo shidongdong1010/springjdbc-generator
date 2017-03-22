@@ -1,0 +1,32 @@
+package ${dto_package};
+
+import java.io.Serializable;
+#foreach($package in $packages)
+import ${package};
+#end
+
+/**
+ * ${table.tableComment}业务实体
+ *
+ * @author ${author}
+ * @version $v: ${version}, $time:${datetime} Exp $
+ */
+public class ${table.className}DTO implements Serializable {
+
+#foreach($s in $list)
+    /** ${s.columnComment} **/
+    private ${s.propertyType.javaType} ${s.propertyName};
+
+#end
+
+#foreach($s in $list)
+    public ${s.propertyType.javaType} ${s.propertyNameGetter}() {
+        return ${s.propertyName};
+    }
+
+    public void ${s.propertyNameSetter}(${s.propertyType.javaType} ${s.propertyName}) {
+        this.${s.propertyName} = ${s.propertyName};
+    }
+
+#end
+}

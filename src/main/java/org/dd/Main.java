@@ -33,7 +33,7 @@ public class Main {
         //List<String> tableName = Arrays.asList(new String[] {"umc_advertising_info"});
         // List<String> tableName = Arrays.asList(new String[] {"sys_default_setting"});
         List<String> tableName = null;
-        //List<String> tableName = Arrays.asList(new String[] {"umc_coin_convert_rule","umc_coin_convert_order", "umc_coin_convert_good", "sys_holidays", "sys_sensitive_word", "umc_user_sail_coin_rule", "umc_user_sail_coin_rule_login"});
+        //List<String> tableName = Arrays.asList(new String[] {"itb_traffic_prize"});
 
         DaoMysqlImpl dao = (DaoMysqlImpl)context.getBean("dao");
         // 所有表名
@@ -44,6 +44,18 @@ public class Main {
         // 生成Model
         GeneratorModel generatorModel = context.getBean(GeneratorModel.class);
         generatorModel.generator(tableList, columnList);
+
+        // 生成Mpaaer
+        GeneratorMapper generatorMapper = context.getBean(GeneratorMapper.class);
+        generatorMapper.generator(tableList, columnList);
+
+        // 生成Dto
+        GeneratorDTO generatorDo = context.getBean(GeneratorDTO.class);
+        generatorDo.generator(tableList, columnList);
+
+        // 生成Convert
+        GeneratorConvert generatorConvert = context.getBean(GeneratorConvert.class);
+        generatorConvert.generator(tableList, columnList);
 
         // 生成Dao
         GeneratorDao generatorDao = context.getBean(GeneratorDao.class);

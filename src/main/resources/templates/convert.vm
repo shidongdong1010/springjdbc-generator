@@ -1,0 +1,93 @@
+package ${model_package};
+
+import ${dto_package}.${table.className}DTO;
+import ${model_package}.${table.className};
+import org.akcome.commons.transformation.collection.CollectionUtil;
+
+import java.util.ArrayList;
+import java.util.List;
+#foreach($package in $packages)
+import ${package};
+#end
+
+/**
+ * 将${table.tableComment}POJO实体与${table.tableComment}业务实体 或${table.tableComment}业务实体处理
+ *
+ * @author ${author}
+ * @version $v: ${version}, $time:${datetime} Exp $
+ */
+public class ${table.className}Convert {
+
+    /**
+     * 将${table.tableComment}POJO实体转换为${table.tableComment}业务实体
+     *
+     * @param  ${table.propertyName} ${table.tableComment}POJO实体
+     * @return ${table.propertyName}DTO ${table.tableComment}业务实体
+     */
+    public static final ${table.className}DTO convert(${table.className} ${table.propertyName}) {
+        if (null == ${table.propertyName}) {
+            return null;
+        }
+
+        ${table.className}DTO ${table.propertyName}DTO = new ${table.className}DTO();
+#foreach($s in $list)
+        ${table.propertyName}DTO.${s.propertyNameSetter}(${table.propertyName}.${s.propertyNameGetter}());
+#end
+        return ${table.propertyName}DTO;
+    }
+
+    /**
+     * 将${table.tableComment}POJO实体对象集合转换为${table.tableComment}业务对象集合
+     *
+     * @param list${table.className} ${table.tableComment}POJO实体对象集合
+     * @return List<${table.className}DTO> ${table.tableComment}业务对象集合
+     */
+    public static final List<${table.className}DTO> convert(List<${table.className}> list${table.className}) {
+        if (CollectionUtil.isEmpty(list${table.className})) {
+            return new ArrayList<${table.className}DTO>();
+        }
+        List<${table.className}DTO> list${table.className}DTO = new ArrayList<${table.className}DTO>();
+
+        for (${table.className} ${table.propertyName} : list${table.className}) {
+            list${table.className}DTO.add(${table.className}Convert.convert(${table.propertyName}));
+        }
+        return list${table.className}DTO;
+    }
+
+
+    /**
+     * 将${table.tableComment}业务实体转换为${table.tableComment}POJO实体
+     *
+     * @param  ${table.propertyName}DTO ${table.tableComment}业务实体类
+     * @return ${table.propertyName} ${table.tableComment}POJO实体
+     */
+    public static final ${table.className} convertTo${table.className}(${table.className}DTO ${table.propertyName}DTO) {
+        if (null == ${table.propertyName}DTO) {
+            return null;
+        }
+
+        ${table.className} ${table.propertyName} = new ${table.className}();
+#foreach($s in $list)
+        ${table.propertyName}.${s.propertyNameSetter}(${table.propertyName}DTO.${s.propertyNameGetter}());
+#end
+        return ${table.propertyName};
+    }
+
+    /**
+     * 将${table.tableComment}业务实体对象集合转换为${table.tableComment}持久化对象集合
+     *
+     * @param list${table.className}DTO ${table.tableComment}业务实体对象集合
+     * @return List<${table.className}> ${table.tableComment}持久化对象集合
+     */
+    public static final List<${table.className}> convertTo${table.className}(List<${table.className}DTO> list${table.className}DTO) {
+        if (CollectionUtil.isEmpty(list${table.className}DTO)) {
+            return new ArrayList<${table.className}>();
+        }
+        List<${table.className}> list${table.className} = new ArrayList<${table.className}>();
+
+        for (${table.className}DTO ${table.propertyName}DTO : list${table.className}DTO) {
+            list${table.className}.add(${table.className}Convert.convertTo${table.className}(${table.propertyName}DTO));
+        }
+        return list${table.className};
+    }
+}

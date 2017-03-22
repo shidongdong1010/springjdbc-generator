@@ -19,5 +19,5 @@ import ${package};
 @Repository
 public class ${table.className}DaoImpl extends ${table.className}BaseDaoImpl implements ${table.className}Dao {
 
-	/** 此处写一些算定义的方法，不要修改Base的方法 **/
+	/** 此处写一些自定义的方法，不要修改Base的方法 **/
 }
