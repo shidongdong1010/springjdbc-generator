@@ -2,7 +2,7 @@ package ${service_package};
 
 import java.util.List;
 
-import ${base_service_package}.${table.className}BaseService;
+import ${base_service_package}.BaseService;
 #foreach($package in $packages)
 import ${package};
 #end
@@ -13,7 +13,7 @@ import ${package};
  * @author ${author}
  * @version $v: ${version}, $time:${datetime} Exp $
  */
-public interface ${table.className}Service extends ${table.className}BaseService {
+public interface ${table.className}Service extends BaseService<${table.className}> {
 
 	/** 此处写一些算定义的方法，不要修改Base的方法 **/
 }

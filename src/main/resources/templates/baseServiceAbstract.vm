@@ -1,0 +1,116 @@
+package ${base_service_package};
+
+import ${base_dao_package}.BaseDao;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.List;
+
+/**
+ * Created by SDD on 2017/3/28.
+ */
+public abstract class BaseServiceAbstract<T> implements BaseService<T> {
+
+	@Autowired
+	private BaseDao<T> baseDao;
+
+	@Override
+	public void save(T t){
+		baseDao.save(t);
+	}
+
+	@Override
+	public void update(T t){
+		baseDao.update(t);
+	}
+
+	@Override
+	public void modify(T t){
+		baseDao.modify(t);
+	}
+
+	@Override
+	public void delete(Long id){
+		baseDao.delete(id);
+	}
+
+	@Override
+	public void batchSave(List<T> list){
+		baseDao.batchSave(list);
+	}
+
+	@Override
+	public void batchUpdate(List<T> list){
+		baseDao.batchUpdate(list);
+	}
+
+	@Override
+	public void batchDelete(List<Long> ids){
+		baseDao.batchDelete(ids);
+	}
+
+	/**
+	 * 根据主键查询
+	 * @param id 主键
+	 * @return DimNode
+	 */
+	@Override
+	public T findById(Long id){
+		return baseDao.findById(id);
+	}
+
+	/**
+	 * 根据对象查询
+	 * @param t
+	 * @return List
+	 */
+	@Override
+	public List<T> find(T t){
+		return baseDao.find(t);
+	}
+
+	/**
+	 * 根据对象查询
+	 * @param t
+	 * @param orders 排序字段，可多字段排序。格式{{"字段名", "asc"}, {"字段名, "desc"}}
+	 * @return List
+	 */
+	@Override
+	public List<T> find(T t, String[][] orders){
+		return baseDao.find(t, orders);
+	}
+
+	/**
+	 * 根据对象查询
+	 * @param t
+	 * @param offset 开始索引
+	 * @param rows 条数(从第offset+1条开始，取rows条)
+	 * @return List
+	 */
+	@Override
+	public List<T> find(T t, Long offset, Long rows){
+		return baseDao.find(t, offset, rows);
+	}
+
+	/**
+	 * 根据对象查询
+	 * @param t
+	 * @param orders 排序字段，可多字段排序。格式{{"字段名", "asc"}, {"字段名, "desc"}}
+	 * @param offset 开始索引
+	 * @param rows 条数(从第offset+1条开始，取rows条)
+	 * @return List
+	 */
+	@Override
+	public List<T> find(T t, String[][] orders, Long offset, Long rows){
+		return baseDao.find(t, orders, offset, rows);
+	}
+
+	/**
+	 * 根据对象查询条数
+	 * @param t
+	 * @return Long
+	 */
+	@Override
+	public Long count(T t){
+		return baseDao.count(t);
+	}
+}

@@ -46,8 +46,8 @@ public class Main {
         generatorModel.generator(tableList, columnList);
 
         // 生成Mpaaer
-        GeneratorMapper generatorMapper = context.getBean(GeneratorMapper.class);
-        generatorMapper.generator(tableList, columnList);
+        //GeneratorMapper generatorMapper = context.getBean(GeneratorMapper.class);
+        //generatorMapper.generator(tableList, columnList);
 
         // 生成Dto
         GeneratorDTO generatorDo = context.getBean(GeneratorDTO.class);

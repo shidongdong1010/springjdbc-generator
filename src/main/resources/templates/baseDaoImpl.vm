@@ -11,10 +11,12 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.jdbc.core.RowMapper;
 
-import ${row_mapper_package}.${table.className}RowMapper;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import ${base_dao_package}.${table.className}BaseDao;
+import ${base_dao_package}.BaseDaoAbstract;
 #foreach($package in $packages)
 import ${package};
 #end
@@ -25,7 +27,7 @@ import ${package};
  * @author ${author}
  * @version $v: ${version}, $time:${datetime} Exp $
  */
-public class ${table.className}BaseDaoImpl implements ${table.className}BaseDao{
+public class ${table.className}BaseDaoImpl extends BaseDaoAbstract<${table.className}>{
 	@Autowired
 	protected JdbcTemplate jdbcTemplate;
 
@@ -229,31 +231,13 @@ public class ${table.className}BaseDaoImpl implements ${table.className}BaseDao{
 #end##
 		}
 
+
 		// 排序
-		if(orders != null && orders.length > 0){
-   			sql.append(" ORDER BY ");
-			for(int i = 0; i < orders.length; i++){
-    			String[] order = orders[i];
-				if(i != 0){
-    				sql.append("_this.`").append(order[0]).append("`, ");
-				}
-				if(order.length == 1){
-    				sql.append("_this.`").append(order[0]).append("` ASC ");
-				}else{
-    				sql.append("_this.`").append(order[0]).append("` ").append(order[1]);
-				}
-			}
-		}
+        super.buildOrderSql(sql, orders);
 
 		// 分页
-		if(offset != null  && rows != null){
-        	sql.append("  limit ?,? ");
-        	param.add(offset);
-        	param.add(rows);
-		} else if(rows != null){
-			sql.append("  limit ? ");
-			param.add(rows);
-		}
+		super.buildPageSql(sql, param, offset, rows);
+
 		return jdbcTemplate.query(sql.toString(), param.toArray(), new ${table.className}RowMapper());
 	}
 
@@ -294,5 +278,23 @@ public class ${table.className}BaseDaoImpl implements ${table.className}BaseDao{
 #end##
 		}
         return jdbcTemplate.queryForObject(sql.toString(), Long.class, param.toArray());
+	}
+
+
+
+	/**
+	 * ${table.tableComment}的RowMapper
+	 */
+	public class ${table.className}RowMapper implements RowMapper<${table.className}> {
+
+
+		@Override
+		public ${table.className} mapRow(ResultSet rs, int rowNum) throws SQLException {
+			${table.className} ${table.propertyName} = new ${table.className}();
+#foreach($s in $columns)
+			${table.propertyName}.${s.propertyNameSetter}(rs.get${s.propertyType.javaType}("${s.columnName}"));
+#end
+			return  ${table.propertyName};
+		}
 	}
 }

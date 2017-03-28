@@ -1,78 +1,71 @@
-package ${base_service_package};
+package ${base_service_impl_package};
 
 import java.util.List;
 
-#foreach($package in $packages)
-import ${package};
-#end
-
 /**
- * ${table.tableComment}Service基础操作接口
- *
- * @author ${author}
- * @version $v: ${version}, $time:${datetime} Exp $
+ * Created by SDD on 2017/3/28.
  */
-public interface ${table.className}BaseService {
+public interface BaseService<T> {
 
-	void save(${table.className} ${table.propertyName});
-	
-	void update(${table.className} ${table.propertyName});
+	void save(T t);
 
-	void modify(${table.className} ${table.propertyName});
+	void update(T t);
 
-	void delete(${table.columnKey.propertyType.javaType} ${table.columnKey.propertyName});
+	void modify(T t);
 
-	void batchSave(List<${table.className}> list);
+	void delete(Long id);
 
-    void batchUpdate(List<${table.className}> list);
+	void batchSave(List<T> list);
 
-    void batchDelete(List<Long> ids);
+	void batchUpdate(List<T> list);
+
+	void batchDelete(List<Long> ids);
 
 	/**
 	 * 根据主键查询
-	 * @param ${table.columnKey.propertyName} ${table.columnKey.columnComment}
-	 * @return ${table.className}
+	 * @param id 主键
+	 * @return DimNode
 	 */
-	${table.className} findById(${table.columnKey.propertyType.javaType} ${table.columnKey.propertyName});
+	T findById(Long id);
 
 	/**
 	 * 根据对象查询
-	 * @param ${table.propertyName}
+	 * @param t
 	 * @return List
 	 */
-	List<${table.className}> find(${table.className} ${table.propertyName});
+	List<T> find(T t);
 
 	/**
 	 * 根据对象查询
-	 * @param ${table.propertyName}
+	 * @param t
 	 * @param orders 排序字段，可多字段排序。格式{{"字段名", "asc"}, {"字段名, "desc"}}
 	 * @return List
 	 */
-	List<${table.className}> find(${table.className} ${table.propertyName}, String[][] orders);
+	List<T> find(T t, String[][] orders);
 
 	/**
 	 * 根据对象查询
-	 * @param ${table.propertyName}
-     * @param offset 开始索引
-     * @param rows 条数(从第offset+1条开始，取rows条)
+	 * @param t
+	 * @param offset 开始索引
+	 * @param rows 条数(从第offset+1条开始，取rows条)
 	 * @return List
 	 */
-	List<${table.className}> find(${table.className} ${table.propertyName}, Long offset, Long rows);
+	List<T> find(T t, Long offset, Long rows);
 
 	/**
 	 * 根据对象查询
-	 * @param ${table.propertyName}
+	 * @param t
 	 * @param orders 排序字段，可多字段排序。格式{{"字段名", "asc"}, {"字段名, "desc"}}
-     * @param offset 开始索引
-     * @param rows 条数(从第offset+1条开始，取rows条)
+	 * @param offset 开始索引
+	 * @param rows 条数(从第offset+1条开始，取rows条)
 	 * @return List
 	 */
-	List<${table.className}> find(${table.className} ${table.propertyName}, String[][] orders, Long offset, Long rows);
+	List<T> find(T t, String[][] orders, Long offset, Long rows);
 
 	/**
 	 * 根据对象查询条数
-	 * @param ${table.propertyName}
+	 * @param t
 	 * @return Long
 	 */
-	Long count(${table.className} ${table.propertyName});
+	Long count(T t);
 }

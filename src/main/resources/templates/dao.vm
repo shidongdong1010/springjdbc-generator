@@ -2,7 +2,7 @@ package ${dao_package};
 
 import java.util.List;
 
-import ${base_dao_package}.${table.className}BaseDao;
+import ${base_dao_package}.BaseDao;
 #foreach($package in $packages)
 import ${package};
 #end
@@ -13,7 +13,7 @@ import ${package};
  * @author ${author}
  * @version $v: ${version}, $time:${datetime} Exp $
  */
-public interface ${table.className}Dao extends ${table.className}BaseDao {
+public interface ${table.className}Dao extends BaseDao<${table.className}> {
 
 	/** 此处写一些算定义的方法，不要修改Base的方法 **/
 }

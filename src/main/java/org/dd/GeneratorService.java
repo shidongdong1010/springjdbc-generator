@@ -28,6 +28,17 @@ public class GeneratorService {
     private DaoMysqlImpl dao;
 
     public void generator(List<Table> tableList,  List<Column> columnList){
+        // 转换模板文件内容
+        String baseServiceContent = templateService.mergeTemplateIntoString("baseService.vm", new HashMap<String, Object>(ConfigUtil.configMap));
+        // 保存文件
+        FileUtil.saveJavaFile(baseServiceContent, ConfigUtil.get("out.path"), ConfigUtil.get("base_service_package"), "BaseService");
+
+        // 转换模板文件内容
+        String baseServiceAbstractContent = templateService.mergeTemplateIntoString("baseServiceAbstract.vm", new HashMap<String, Object>(ConfigUtil.configMap));
+        // 保存文件
+        FileUtil.saveJavaFile(baseServiceAbstractContent, ConfigUtil.get("out.path"), ConfigUtil.get("base_service_package"), "BaseServiceAbstract");
+
+
         for(Table table : tableList) {
             Map<String, Object> map = new HashMap<String, Object>();
             map.putAll(ConfigUtil.configMap);
@@ -42,16 +53,16 @@ public class GeneratorService {
             map.put("columns", columns);
             map.put("packages", this.getPackageList(table));
 
-            // 转换模板文件内容
+            /*// 转换模板文件内容
             String baseServiceContent = templateService.mergeTemplateIntoString("baseService.vm", map);
             // 保存文件
             FileUtil.saveJavaFile(baseServiceContent, ConfigUtil.get("out.path"), ConfigUtil.get("base_service_package"), table.getClassName() + "BaseService");
 
             // 转换模板文件内容
-            String baseServiceImplContent = templateService.mergeTemplateIntoString("baseServiceImpl.vm", map);
+            String baseServiceImplContent = templateService.mergeTemplateIntoString("baseService.vm", map);
             // 保存文件
             FileUtil.saveJavaFile(baseServiceImplContent, ConfigUtil.get("out.path"), ConfigUtil.get("base_service_impl_package"), table.getClassName() + "BaseServiceImpl");
-
+*/
             // 转换模板文件内容
             String serviceContent = templateService.mergeTemplateIntoString("service.vm", map);
             // 保存文件

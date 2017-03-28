@@ -1,9 +1,8 @@
 package ${service_impl_package};
 
-import java.util.List;
-
-import ${base_service_impl_package}.${table.className}BaseServiceImpl;
+import ${base_service_package}.BaseServiceAbstract;
 import ${service_package}.${table.className}Service;
+import ${model_package}.${table.className};
 
 import org.springframework.stereotype.Service;
 #foreach($package in $packages)
@@ -17,7 +16,7 @@ import ${package};
  * @version $v: ${version}, $time:${datetime} Exp $
  */
 @Service
-public class ${table.className}ServiceImpl extends ${table.className}BaseServiceImpl implements ${table.className}Service {
+public class ${table.className}ServiceImpl extends BaseServiceAbstract<${table.className}> implements ${table.className}Service {
 
 	/** 此处写一些自定义的方法，不要修改Base的方法 **/
 }

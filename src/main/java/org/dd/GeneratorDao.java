@@ -27,9 +27,18 @@ public class GeneratorDao {
     private DaoMysqlImpl dao;
 
     public void generator(List<Table> tableList,  List<Column> columnList){
+        // 转换模板文件内容
+        String baseDaoContent = templateService.mergeTemplateIntoString("baseDao.vm", new HashMap<String, Object>(ConfigUtil.configMap));
+        // 保存文件
+        FileUtil.saveJavaFile(baseDaoContent, ConfigUtil.get("out.path"), ConfigUtil.get("base_dao_package"), "BaseDao");
+
+        // 转换模板文件内容
+        String baseDaoAbstractContent = templateService.mergeTemplateIntoString("baseDaoAbstract.vm", new HashMap<String, Object>(ConfigUtil.configMap));
+        // 保存文件
+        FileUtil.saveJavaFile(baseDaoAbstractContent, ConfigUtil.get("out.path"), ConfigUtil.get("base_dao_package"), "BaseDaoAbstract");
+
         for(Table table : tableList) {
-            Map<String, Object> map = new HashMap<String, Object>();
-            map.putAll(ConfigUtil.configMap);
+
             // 得到该表的所有字段
             List<Column> columns = this.getColumn(columnList, table.getTableName());
             // 得到主键
@@ -37,14 +46,11 @@ public class GeneratorDao {
             table.setColumns(columns);
             table.setColumnKey(columnKey);
 
+            Map<String, Object> map = new HashMap<String, Object>();
+            map.putAll(ConfigUtil.configMap);
             map.put("table", table);
             map.put("columns", columns);
             map.put("packages", this.getPackageList(table));
-
-            // 转换模板文件内容
-            String baseDaoContent = templateService.mergeTemplateIntoString("baseDao.vm", map);
-            // 保存文件
-            FileUtil.saveJavaFile(baseDaoContent, ConfigUtil.get("out.path"), ConfigUtil.get("base_dao_package"), table.getClassName() + "BaseDao");
 
             // 转换模板文件内容
             String baseDaoImplContent = templateService.mergeTemplateIntoString("baseDaoImpl.vm", map);

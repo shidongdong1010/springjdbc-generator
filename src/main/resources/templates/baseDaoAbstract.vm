@@ -1,0 +1,54 @@
+package ${base_dao_impl_package};
+
+import java.util.List;
+
+/**
+* Dao基础操作接口
+*
+* @author SDD
+* @version $v: 1.0.0, $time:2017-03-22 15:57:00 Exp $
+*/
+public abstract class BaseDaoAbstract<T> implements BaseDao<T> {
+
+	/**
+	 * 根据对象查询条数
+	 * @param sql
+	 * @param orders
+	 */
+	protected void buildOrderSql(StringBuilder sql, String[][] orders) {
+		// 排序
+		if (orders != null && orders.length > 0) {
+			sql.append(" ORDER BY ");
+			for (int i = 0; i < orders.length; i++) {
+				String[] order = orders[i];
+				if (i != 0) {
+					sql.append("_this.`").append(order[0]).append("`, ");
+				}
+				if (order.length == 1) {
+					sql.append("_this.`").append(order[0]).append("` ASC ");
+				} else {
+					sql.append("_this.`").append(order[0]).append("` ").append(order[1]);
+				}
+			}
+		}
+	}
+
+	/**
+	 * 根据对象查询条数
+	 * @param sql
+	 * @param param
+	 * @param offset
+	 * @param rows
+	 */
+	protected void buildPageSql(StringBuilder sql, List<Object> param, Long offset, Long rows) {
+		// 分页
+		if (offset != null && rows != null) {
+			sql.append("  limit ?,? ");
+			param.add(offset);
+			param.add(rows);
+		} else if (rows != null) {
+			sql.append("  limit ? ");
+			param.add(rows);
+		}
+	}
+}
