@@ -295,6 +295,7 @@ public class ${table.className}BaseDaoImpl extends BaseDaoAbstract<${table.class
 			String[] order = orders[i];
 			String[] orderColumn = order;
 			orderColumn[0] = columns.get(order[0]);
+			orderColumns[i] = orderColumn;
 		}
 		return orderColumns;
 	}
