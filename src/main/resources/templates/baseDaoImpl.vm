@@ -286,7 +286,7 @@ public class ${table.className}BaseDaoImpl extends BaseDaoAbstract<${table.class
 	 * @return Long
 	 */
 	public String[][] orderColumns(String[][] orders) {
-		if (orders == null && orders.length == 0) {
+		if (orders == null || orders.length == 0) {
 			return null;
 		}
 		Map<String, String> columns = new HashMap<>();
